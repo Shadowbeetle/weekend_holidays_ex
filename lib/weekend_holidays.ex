@@ -1,6 +1,7 @@
 defmodule WeekendHolidays do
   @moduledoc """
-  Documentation for `WeekendHolidays`.
+  `WeekendHolidays` is a module four listing, counting holidays based on whether they fall on a weekday or on the weekend,
+  and aggregating of these data for multple years using statistical functions.
   """
 
   @holidays [
@@ -24,12 +25,15 @@ defmodule WeekendHolidays do
 
   @spec is_weekend(integer(), date_tuple()) :: boolean()
   @doc """
-  Hello world.
+  Whether a day falls on the weekend.
 
   ## Examples
 
-      iex> WeekendHolidays.hello()
-      :world
+      iex> WeekendHolidays.weekend(2022, {10, 15})
+      true
+
+      iex> WeekendHolidays.weekend(2023, {10, 16})
+      false
 
   """
   def is_weekend(year, holiday) do
@@ -40,6 +44,18 @@ defmodule WeekendHolidays do
   end
 
   @spec get_holidays(integer(), kind()) :: list(integer())
+  @doc """
+  List holidays of a given year based on if they fall on a weekday or on the weekend
+
+  ## Examples
+
+      iex> WeekendHolidays.get_holidays(2022, :weekend)
+      [{"01", "01"}, {"05", "01"}, {"08", "20"}, {"10", "23"}, {"12", "25"}]
+
+      iex> WeekendHolidays.get_holidays(2022, :weekday)
+      [{"03", "15"}, {"11", "01"}, {"12", "26"}]
+
+  """
   def get_holidays(year, :weekend) do
     Enum.filter(@holidays, fn holiday -> is_weekend(year, holiday) end)
   end
@@ -49,11 +65,36 @@ defmodule WeekendHolidays do
   end
 
   @spec count_holidays(integer(), kind()) :: non_neg_integer
+  @doc """
+  Count holidays of a given year based on if they fall on a weekday or on the weekend
+
+  ## Examples
+
+      iex> WeekendHolidays.count_holidays(2022, :weekend)
+      5
+
+      iex> WeekendHolidays.count_holidays(2022, :weekday)
+      3
+
+  """
   def count_holidays(year, kind) do
     get_holidays(year, kind) |> Enum.count()
   end
 
   @spec aggregate_holidays(Range, kind(), (list(number()) -> number())) :: any
+  @doc """
+  Aggregate holidays for multple years using statistical functions based on if they fall on a weekday or on the weekend.
+  Usually used with a range of 399 years, as every 400 years the week configuration resets.
+
+  ## Examples
+
+      iex> WeekendHolidays.aggregate_holidays(2022..2421, :weekend, &Statistics.mean/1)
+      2.285
+
+      iex> WeekendHolidays.aggregate_holidays(2022..2421, :weekday, &Statistics.median/1)
+      6.0
+
+  """
   def aggregate_holidays(year_range, kind, func) do
     holiday_counts =
       for year <- year_range do

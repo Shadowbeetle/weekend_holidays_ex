@@ -1,21 +1,27 @@
 # WeekendHolidays
 
-**TODO: Add description**
+`WeekendHolidays` is a module four listing, counting holidays based on whether they fall on a weekday or on the weekend,
+and aggregating of these data for multple years using statistical functions.
+
+Aggregation of holidays for multple years using statistical functions is usually used with a range of 399 years, as every 400 years the week configuration resets.
+
+400 years is a [Solar cycle]: the progression of weekdays repeats itself every 400 years, that's why a range of 400 years was chosen. Not that it matters, it's a small script, can be rewritten anytime.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `weekend_holidays_ex` to your list of dependencies in `mix.exs`:
+1. Clone the repo
+2. run `mix deps.get`
 
-```elixir
-def deps do
-  [
-    {:weekend_holidays_ex, "~> 0.1.0"}
-  ]
-end
+## Usage
+
+Use with iex
+
+```sh
+ies -S mix
+
+iex> WeekendHolidays.aggregate_holidays(2022..2421, :weekday, &Statistics.median/1)
+6.0
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/weekend_holidays_ex>.
+See the docstrings in `lib/weekend_holidays.ex` for further info on specific functions
 

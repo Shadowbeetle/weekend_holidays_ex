@@ -20,6 +20,8 @@ defmodule WeekendHolidays do
   @type day :: integer()
   @type date_tuple :: {month(), day()}
 
+  @type kind :: :weekend | :weekday
+
   @spec is_weekend(integer(), date_tuple()) :: boolean()
   @doc """
   Hello world.
@@ -37,41 +39,25 @@ defmodule WeekendHolidays do
     Enum.member?(@weekend_days, weekday_of_holiday)
   end
 
-  @spec get_weekend_holidays(integer()) :: list(integer())
-  def get_weekend_holidays(year) do
+  @spec get_holidays(integer(), kind()) :: list(integer())
+  def get_holidays(year, :weekend) do
     Enum.filter(@holidays, fn holiday -> is_weekend(year, holiday) end)
   end
 
-  @spec get_week_holidays(integer()) :: list(integer())
-  def get_week_holidays(year) do
+  def get_holidays(year, :weekday) do
     Enum.filter(@holidays, fn holiday -> not is_weekend(year, holiday) end)
   end
 
-  @spec count_weekend_holidays(integer) :: non_neg_integer
-  def count_weekend_holidays(year) do
-    get_weekend_holidays(year) |> Enum.count()
+  @spec count_holidays(integer(), kind()) :: non_neg_integer
+  def count_holidays(year, kind) do
+    get_holidays(year, kind) |> Enum.count()
   end
 
-  @spec count_week_holidays(integer) :: non_neg_integer
-  def count_week_holidays(year) do
-    get_week_holidays(year) |> Enum.count()
-  end
-
-  @spec aggregate_week_holidays(Range, (list(number()) -> number())) :: any
-  def aggregate_week_holidays(year_range, func) do
+  @spec aggregate_holidays(Range, kind(), (list(number()) -> number())) :: any
+  def aggregate_holidays(year_range, kind, func) do
     holiday_counts =
       for year <- year_range do
-        count_week_holidays(year)
-      end
-
-    func.(holiday_counts)
-  end
-
-  @spec aggregate_weekend_holidays(Range, (list(number()) -> number())) :: any
-  def aggregate_weekend_holidays(year_range, func) do
-    holiday_counts =
-      for year <- year_range do
-        count_weekend_holidays(year)
+        count_holidays(year, kind)
       end
 
     func.(holiday_counts)

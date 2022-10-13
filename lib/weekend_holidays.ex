@@ -29,10 +29,10 @@ defmodule WeekendHolidays do
 
   ## Examples
 
-      iex> WeekendHolidays.weekend(2022, {10, 15})
+      iex> WeekendHolidays.is_weekend(2022, {10, 15})
       true
 
-      iex> WeekendHolidays.weekend(2023, {10, 16})
+      iex> WeekendHolidays.is_weekend(2023, {10, 16})
       false
 
   """

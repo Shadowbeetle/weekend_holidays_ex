@@ -1,0 +1,53 @@
+# Weekend Holiday Notebook
+
+## Section
+
+```elixir
+WeekendHolidays.is_weekend(2022, {10, 15})
+```
+
+```elixir
+WeekendHolidays.is_weekend(2022, {10, 17})
+```
+
+```elixir
+WeekendHolidays.get_holidays(2022, :weekend)
+```
+
+```elixir
+WeekendHolidays.get_holidays(2022, :weekday)
+```
+
+```elixir
+WeekendHolidays.count_holidays(2022, :weekend)
+```
+
+```elixir
+WeekendHolidays.count_holidays(2022, :weekday)
+```
+
+```elixir
+WeekendHolidays.aggregate_holidays(2022..2421, :weekend, &Statistics.mean/1)
+```
+
+```elixir
+WeekendHolidays.aggregate_holidays(2022..2421, :weekday, &Statistics.mean/1)
+```
+
+```elixir
+WeekendHolidays.aggregate_holidays(2022..2421, :weekend, &Statistics.median/1)
+```
+
+```elixir
+WeekendHolidays.aggregate_holidays(2022..2421, :weekday, &Statistics.median/1)
+```
+
+```elixir
+holiday_count_tabular =
+  for year <- 2022..2421 do
+    holiday_count = WeekendHolidays.count_holidays(year, :weekend)
+    %{year: year, weekend_holidays: holiday_count}
+  end
+
+Kino.DataTable.new(holiday_count_tabular)
+```
